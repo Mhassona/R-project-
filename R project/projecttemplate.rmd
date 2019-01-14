@@ -1,0 +1,311 @@
+Red Wine Quality Analyst By Mohamed Hassona 
+========================================================
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using in your analysis in this code
+# chunk.
+knitr::opts_chunk$set( echo=FALSE,warning=FALSE,message=FALSE)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+# Notice that the parameter "echo" was set to FALSE for this code chunk. This
+# prevents the code from displaying in the knitted HTML output. You should set
+# echo=FALSE for all code chunks in your file, unless it makes sense for your
+# report to show the code that generated a particular plot.
+
+# The other parameters for "message" and "warning" should also be set to FALSE
+# for other code chunks once you have verified that each plot comes out as you
+# want it to. This will clean up the flow of your report.
+
+library(ggplot2)
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+setwd("C:/Users/teaca/Documents/r project")
+pf <- read.csv("wineQualityReds.csv")
+pf$X <- NULL
+```
+
+
+
+# Univariate Plots Section
+
+
+
+```{r echo=FALSE, Univariate_Plots1}
+str(pf)
+```
+
+```{r echo=FALSE, Univariate_Plots2}
+summary(pf)
+```
+
+The dataset has 12 variables and nearly 1600 observations  
+
+
+```{r echo=FALSE, Univariate_Plots3}
+# Histogram of quality
+ggplot(aes(x = quality), data = pf) +
+  geom_histogram(binwidth=1)
+```
+
+The majority of wine quality is between 5 and 6 this is a normal distrubution this shows that the majority of wines are of average quility with very few scoring exceptionly high or low 
+
+
+
+```{r echo=FALSE, Univariate_Plots4}
+# Histogram of alcohol
+ggplot(aes(x = alcohol), data = pf) +
+  geom_histogram(binwidth=0.5)
+```
+
+The mean and median make this a normal disrtribution but the graph looks like it is right skewed 
+
+```{r echo=FALSE, Univariate_Plots5}
+# Histogram of sulphates
+ggplot(aes(x = sulphates), data = pf) +
+  geom_histogram(binwidth=0.1)
+```
+
+Sulphates like alchol has a mean and median make this a normal disrtribution but the graph looks like it is right skewed
+
+```{r echo=FALSE, Univariate_Plots6}
+# Histogram of pH
+ggplot(aes(x = pH), data = pf) +
+  geom_histogram(binwidth=0.1)
+```
+
+```{r echo=FALSE, Univariate_Plots7}
+# boxplot of pH
+ggplot(aes(y = pH), data = pf) +
+  geom_boxplot()
+```
+
+The pH values have a normal distribution with very few outliers 
+
+
+```{r echo=FALSE, Univariate_Plots8}
+# Histogram of citric acid
+ggplot(aes(x = citric.acid), data = pf) +
+  geom_histogram(binwidth=0.05)
+```
+
+```{r echo=FALSE, Univariate_Plots9}
+# Histogram of citric acid without outliers
+ggplot(aes(x = citric.acid), data = pf) +
+  geom_histogram(binwidth=0.05)+
+  scale_x_continuous(lim = c(0, 0.75), breaks = seq(0, 0.75, 0.05))
+  
+```
+
+Citric acid is right skewed I made a secound histrogram to look closer at the lower values and ignor the higher outliers
+
+```{r echo=FALSE, Univariate_Plots10}
+# Histogram of volatile.acidity
+ggplot(aes(x = volatile.acidity), data = pf) +
+  geom_histogram(binwidth=0.05)
+```
+```{r echo=FALSE, Univariate_Plots12}
+# Histogram of volatile.acidity without outliers
+ggplot(aes(x = volatile.acidity), data = pf) +
+  geom_histogram(binwidth=0.05)+
+  scale_x_continuous(lim = c(0, 1.2), breaks = seq(0, 1.2, 0.5))
+```
+
+The mean and median make this a normal disrtribution the first graph looks like it is right skewed but I took out outliers for the secound graph and you can see it's a normal distrobution 
+
+```{r echo=FALSE, Univariate_Plots13}
+# Histogram of fixed.acidity
+ggplot(aes(x = fixed.acidity), data = pf) +
+  geom_histogram(binwidth=0.5)
+```
+
+Fixed acidity is slightly right skewed and most values are between 7-8 
+
+```{r echo=FALSE, Univariate_Plots14}
+# Histogram of chlorides
+ggplot(aes(x = chlorides), data = pf) +
+  geom_histogram(binwidth=0.01)
+```
+
+This is intresting this graph has a high standard devation and is right skewed and most values are close to 0.08 and a max value of 0.6
+
+
+# Univariate Analysis
+
+
+
+### What is the structure of your dataset?
+The dataset has 12 variables and 1599 observations
+### What is/are the main feature(s) of interest in your dataset?
+The main variable is quality I would like to see how it is determined by other variables 
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+I think alchol will correlate well with quality 
+### Did you create any new variables from existing variables in the dataset?
+I did not make any new variables 
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+alchol and sulphates had an unusual distribution which had a right skew and normal mean/median (alchol and sulphates), on some of the graphs I reduced the x axcise to take out outliers and to loook at the data in more detail  
+
+# Bivariate Plots Section
+
+
+
+
+
+```{r echo=FALSE, Bivariate_Plots1}
+# scatter of alcohol - quality with jitter 
+ggplot(aes(x = alcohol, y = quality), data = pf) +
+  geom_jitter(alpha=0.5, width = 0.1, height = 0.35)
+```
+
+
+```{r echo=FALSE, Bivariate_Plots2}
+cor.test(pf$quality, pf$alcohol)
+```
+
+I added jitter to this graph to make it more clear for the relationship between quality and alcohol the correlation coefficient is 0.476 this shows that there is a stong relationship, the graph shows that higher alcohol content genrally have higher quality rateing 
+
+```{r echo=FALSE, Bivariate_Plots3}
+cor.test(pf$pH, pf$quality)
+```
+
+
+```{r echo=FALSE, Bivariate_Plots4}
+# scatter of pH - quality
+ggplot(aes(x = pH, y = quality), data = pf) +
+  geom_jitter(alpha=0.5, width = 0, height = 0.35)
+```
+
+I added jitter to this grah to make it more clear, pH and quality have a low negative correlation coefficient of -0.0577 this shows they have almost no relationship, looking at the graph allot of wines with the highest quality rateing have a pH value between 3 - 3.25
+
+
+```{r echo=FALSE, Bivariate_Plots5}
+cor.test(pf$fixed.acidity, pf$density)
+```
+
+```{r echo=FALSE, Bivariate_Plots6}
+# scatter of fixed.acidity - density
+ggplot(aes(x = fixed.acidity, y = density), data = pf) +
+  geom_point()
+```
+
+Fixed acidity and density have a correlation coefficient of 0.668 this shows a very stong relationship, the graph shows a clear trend between thease 2 variables 
+
+
+
+# Bivariate Analysis
+
+
+### Talk about some of the relationships you observed in this part of the \
+Investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+I looked at a number of relationships alchol and quility showed a promising relationship 
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+I found density and fixed acidity had a storng relationship 
+### What was the strongest relationship you found?
+Density and fixed acidity had the stongest relationship with a correlation coefficient of 0.668
+
+# Multivariate Plots Section
+
+
+
+```{r echo=FALSE, Multivariate_Plots1}
+# scatter of fixed.acidity - density by quality
+ggplot(aes(x = fixed.acidity, y = density), data = pf) +
+  geom_point(aes(color = as.factor(quality)))+
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+I thought it might be intresting to see quality added to this graph as density and fixed acidity had a high corrilation, from this graph it looks like density and fixed acidity do not have much effect on quality 
+
+```{r echo=FALSE, Multivariate_Plots2}
+# scatter of  alcohol - sulphates by quality
+ggplot(aes(x = alcohol, y = sulphates), data = pf) +
+  geom_jitter(alpha=0.5, width = 0.1, height = 0, aes(color = as.factor(quality)))+
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+This graph shows somthing intresting allot of the high quility wine is between 0.75 - 1 sulphates 
+
+```{r echo=FALSE, Multivariate_Plots3}
+# scatter of volatile.acidity - quality by alcohol
+ggplot(aes(x = volatile.acidity, y = quality), data = pf) +
+  geom_jitter(alpha=0.5, width = 0, height = 0.5, aes(color = alcohol))
+
+```
+
+This graph shows that most wine with a quility score or 8 have a volatile acidity of less than 0.5
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+Investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+There are a few things that high rated wine have the stongest relationship that I found was alcohol content with higher being better 
+### Were there any interesting or surprising interactions between features?
+Quality rateing 8 wine with a volatile acidity 0.5 and lower seemed to have the lowest alcohol content in that rateing
+
+
+# Final Plots and Summary
+
+
+
+### Plot One
+```{r echo=FALSE, Plot_One}
+# hitrogram of quality
+ggplot(data=pf, aes(factor(quality))) + 
+  geom_bar(colour="black", fill = "steelblue") +
+  ggtitle("Quality of Wine Histrogram")+
+  xlab("Quality") + 
+  ylab("Number Of Wines")
+```
+
+### Description One
+The majorty of wine is rated 5 or 6 with very few rated higher or lower it is rated on a scale of 0 - 10 with no entrys for 0-2 and 9-10, this is a normal distrubution this shows that the majority of wines are of average quility with very few scoring exceptionly high or low 
+
+### Plot Two
+```{r echo=FALSE, Plot_Two}
+# scatter of fixed.acidity - density 
+ggplot(aes(x = fixed.acidity, y = density), data = pf) +
+  geom_point(colour="steelblue")+
+  ggtitle("Density and Fixed Acidity Scatter Graph")+
+  xlab(expression(Fixed~Acidity~(g/dm^{3}))) + 
+  ylab(expression(Density~(g/cm^{3})))
+
+
+```
+
+### Description Two
+Fixed acidity and density have a correlation coefficient of 0.668 this shows a very stong relationship, the graph shows a clear trend between thease 2 variables 
+
+
+### Plot Three
+```{r echo=FALSE, Plot_Three}
+#scatter of alcohol - sulphates by quality
+ggplot(aes(x = alcohol, y = sulphates), data = pf) +
+  geom_jitter(alpha=0.5, width = 0.3, height = 0, aes(color = as.factor(quality)))+
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)+
+  ggtitle("Alcohol and Sulphates Scatter Graph by Quality")+
+  xlab("Alcohol (% by Volume)") + 
+  ylab(expression(Sulphates~(g/dm^{3})))
+
+```
+
+### Description Three
+
+This shows the correlation quality has with higher alcohol and suphate range between 0.75 and 1
+
+------
+# Observations 
+This data set was intresting to look though it has 12 variables related to wine. going though I had some insights into what makes a high quality wine the main being alcohol, haveing a sulphates between 0.75 and 1 also corraltes with high rateings. I also found that density and fixed acidity corrlated stongly. 
+
+# Reflection
+At first I found R to be hard to get into but I have found it to b a very good programming launguage for makeing graphs I still prefer jupter notebooks to r studio. this project has been very good at putting all the code I have learnt into practice and I have learnt allot about putting a project toghther  
+  
